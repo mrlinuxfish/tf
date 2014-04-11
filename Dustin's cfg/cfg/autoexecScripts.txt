@@ -1,0 +1,188 @@
+## Standard cfg (for use if one class cfg contradicts other classes)
+developer 1
+echo "default settings loaded"
+developer 0
+
+// viewmodel/combination script binds
+bind "0" "slot10"
+bind "1" "slot1"
+bind "2" "slot2"
+bind "3" "slot3"
+bind "4" "slot4"
+bind "q" "lastinv"
+
+bind "mouse1" "+attack"
+bind "mouse2" "+attack2"
+
+
+// crosshair script binds
+bind "a" "+moveleft"
+bind "d" "+moveright"
+bind "s" "+back"
+bind "w" "+forward"
+bind "SPACE" "+jump"
+bind "ctrl" "+duck"
+
+sensitivity // [#] Your default sens
+r_drawviewmodel // [0/1]  set to "1" for viewmodels on, "0" for off
+
+## Crosshair script
+// first you set up the colors and shapes/sizes you want the xhair to toggle through (cl_crosshair_file = type cl_crosshair_scale = size). Keep in mind that the base size of the crosshair varies depending on the weapon: //
+// // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // // //  //
+ 
+//xhair TYPE toggle--switches crosshair type when shooting; good for preventing Amby xhair from expanding too large (uses my settings as an example). NOTE: Must be manually integrated with viewmodel scripts to work in conjunction.
+//=========================================================
+alias dotxhairtype "dotxhairtypeb"
+alias dotxhairtypeb "cl_crosshair_file crosshair5;cl_crosshair_scale 14;alias dotxhairtype dotxhairtyper" // tweak crosshair_scale values to your liking
+alias dotxhairtyper "cl_crosshair_file crosshair2;cl_crosshair_scale 22;alias dotxhairtype dotxhairtypeb"
+
+bind mouse1 +crosshairfire
+alias +crosshairfire "+attack;dotxhairtype;spec_next"
+alias -crosshairfire "-attack;dotxhairtype"
+//=========================================================
+ 
+// xhair COLOR toggle
+//=========================================================
+alias dotxhaircolor "dotxhaircolorb"
+alias dotxhaircolorb "cl_crosshair_blue 0; cl_crosshair_green 255; cl_crosshair_red 0;alias dotxhaircolor dotxhaircolorc"
+alias dotxhaircolorc "cl_crosshair_blue 255; cl_crosshair_green 0; cl_crosshair_red 255;alias dotxhaircolor dotxhaircolord"
+alias dotxhaircolord "cl_crosshair_blue 240; cl_crosshair_green 255; cl_crosshair_red 0;alias dotxhaircolor dotxhaircolorb"
+//=========================================================
+ 
+// // // // // // // // // // // // // // // // //
+// movement color toggle/flashing xhair example //
+// // // // // // // // // // // // // // // // //
+ 
+bind "w" +fw
+alias +fw "+forward;dotxhaircolor"
+alias -fw "-forward;dotxhaircolor"
+ 
+bind "s" +bw
+alias +bw "+back;dotxhaircolor"
+alias -bw "-back;dotxhaircolor"
+ 
+bind "d" +mr
+alias +mr "+moveright;dotxhaircolor"
+alias -mr "-moveright;dotxhaircolor"
+ 
+bind "a" +ml
+alias +ml "+moveleft;dotxhaircolor"
+alias -ml "-moveleft;dotxhaircolor"
+//=========================================================
+ 
+// // // // // // // // // // //
+// Other color cycle examples //
+// // // // // // // // // // //
+ 
+//Black/White xhair color toggle
+//=========================================================
+alias dotxhaircolorbw "dotxhaircolorbwb"
+alias dotxhaircolorblack "cl_crosshair_blue 0; cl_crosshair_green 0; cl_crosshair_red 0;alias dotxhaircolorbw dotxhaircolorwhite"
+alias dotxhaircolorwhite "cl_crosshair_blue 255; cl_crosshair_green 255; cl_crosshair_red 255;alias dotxhaircolorbw dotxhaircolorblack"
+//=========================================================
+ 
+//xhair team color toggle
+//=========================================================
+alias dotxhairteamcolor "dotxhairteamcolorred"
+alias dotxhairteamcolorred "cl_crosshair_blue 0; cl_crosshair_green 0; cl_crosshair_red 255;alias dotxhairteamcolor dotxhairteamcolorblu"
+alias dotxhairteamcolorblu "cl_crosshair_blue 255; cl_crosshair_green 0; cl_crosshair_red 0;alias dotxhairteamcolor dotxhairteamcolorred"
+ 
+// Set "dotxhairteamcolor" to appropriate team
+bind [key1] dotxhairteamcolor dotxhaircolorblu
+bind [key2] dotxhairteamcolor dotxhaircolored
+ 
+// Make "lastdisguise" show your disguise's current team color
+bind [last disguise key] "lastdisguise;dotxhaircolor"
+
+## crosshair with null-canceling movement
+// color toggler
+alias dotxhaircolor "dotxhaircolorb"
+alias dotxhaircolorb "cl_crosshair_blue 0; cl_crosshair_green 255; cl_crosshair_red 0;alias dotxhaircolor dotxhaircolorc"
+alias dotxhaircolorc "cl_crosshair_blue 255; cl_crosshair_green 0; cl_crosshair_red 255;alias dotxhaircolor dotxhaircolord"
+alias dotxhaircolord "cl_crosshair_blue 240; cl_crosshair_green 255; cl_crosshair_red 0;alias dotxhaircolor dotxhaircolorb"
+
+// Null-cancelling movement script
+// (prevents you from pressing two opposing directions, which causes you to stop moving)
+
+bind w +mfwd
+bind s +mback
+bind a +mleft
+bind d +mright
+
+alias +mfwd "-back;+forward;alias checkfwd +forward;dotxhaircolor"
+alias +mback "-forward;+back;alias checkback +back;dotxhaircolor"
+alias +mleft "-moveright;+moveleft;alias checkleft +moveleft;dotxhaircolor"
+alias +mright "-moveleft;+moveright;alias checkright +moveright;dotxhaircolor"
+alias -mfwd "-forward;checkback;alias checkfwd none;dotxhaircolor"
+alias -mback "-back;checkfwd;alias checkback none;dotxhaircolor"
+alias -mleft "-moveleft;checkright;alias checkleft none;dotxhaircolor"
+alias -mright "-moveright;checkleft;alias checkright none;dotxhaircolor"
+alias checkfwd none
+alias checkback none
+alias checkleft none
+alias checkright none
+alias none ""
+
+##
+  // Stabby's Viewmodel Script for Spy //
+     
+    // // // // // // // // // // //  // // // // // // // // // // // //  //
+    //Viewmodels<< on when shooting amby, off when knife or watch out//
+    // // // // // // // // // // //  // // // // // // // // // // // //  //
+     
+     
+    // spawn with knife out and viewmodel mode set to "on"
+     
+    slot3
+    r_drawviewmodel 1
+    knife_vm_mode
+     
+     
+    // replace [KEY] with the your Keybinds for the sapper/knife/ambassador/watch
+     
+    bind "2" +equip_sap         // Key/button for sapper
+    bind "3" +equip_knife      // Key/button for knife
+    bind "1" +equip_amby      // Key/button for ambassador
+    bind "mouse2" "+watch;spec_prev"          // Key for watch (mouse2 default)
+     
+     
+    //re-bind mouse1
+     
+    alias knife_vm_mode "bind mouse1 +viewmodel_knife" // binds mouse1 to turn viewmodel on when attacking (for knife knife)
+    alias amby_vm_mode "bind mouse1 +viewmodel_amby"  // binds mouse1 to turn viewmodel off when attacking (for amby)
+    alias sap_vm_mode "bind mouse1 +viewmodel_sap"   // binds mouse 1 to turn viewmodel on when attacking and off when not (for sapper)
+     
+     
+    // causes viewmodel to go off or on when you shoot
+     
+    alias +viewmodel_knife "+attack;r_drawviewmodel 1;spec_next"          // attacks, turns viewmodel on
+    alias -viewmodel_knife "-attack;r_drawviewmodel 1"         // finishes atack, turns viewmodel on again as safeguard
+     
+    alias +viewmodel_amby "+attack;r_drawviewmodel 0;spec_next"          // attacks, turns viewmodel off
+    alias -viewmodel_amby "-attack;r_drawviewmodel 0"         // finishes attack, turns viewmodel off again as a safeguard
+     
+    alias +viewmodel_sap "+attack;r_drawviewmodel 1;spec_next"          // shows sapper when sapping
+    alias -viewmodel_sap "-attack;r_drawviewmodel 0"         // hides sapper when mouse1 released
+     
+     
+    // Equip item, turn vm on/off, set vm toggle for attack
+     
+    alias +equip_knife "slot3;r_drawviewmodel 1"             // Equips knife, turns viewmodels on
+    alias -equip_knife "knife_vm_mode;r_drawviewmodel 1"    // Sets viewmodels to turn ON when stabbing (makes sure it stays on)
+     
+    alias +equip_amby "slot1"                               // Equips amby
+    alias -equip_amby "amby_vm_mode"                        // Sets viewmodels to turn OFF when shooting
+     
+    alias +equip_sap "slot2;r_drawviewmodel 1"             // Equips sapper, turns viewmodels on
+    alias -equip_sap "sap_vm_mode"                        // Sets viewmodels to turn on while firing, and off when not
+     
+    alias +watch "+attack2;r_drawviewmodel 1"              // watch up/cloak on/secondary attack + viewmodels on
+    alias -watch "-attack2;r_drawviewmodel 1"             // viewmodels on again as safeguard
+     
+     
+    // // // // // // // // // // //  //
+     
+     
+    echo "Viewmodel script loaded" // confirms script loaded in the console
+
+##
